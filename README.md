@@ -9,12 +9,6 @@ A single-page e-commerce web application built as part of an internship assignme
 
 ---
 
-## 📂 GitHub Repository  
-🔗 [Frontend Repository](https://github.com/Prachikdhunde04/ecommerce-frontend)  
-🔗 [Backend Repository](https://github.com/Prachikdhunde04/ecommerce-backend)  
-
----
-
 ## ✨ Features  
 
 ### 🔐 Authentication  
