@@ -37,9 +37,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/items", itemsRoutes);
 app.use("/api/cart", cartRoutes);
 
-// ------------------------
-// /api/products route - merge multiple APIs
-// ------------------------
 app.get("/api/products", async (req, res) => {
   try {
     const [fakeRes, dummyRes, kolzRes] = await Promise.all([
@@ -48,25 +45,41 @@ app.get("/api/products", async (req, res) => {
       fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json").then(r => r.json()),
     ]);
 
+    // Normalize FakeStore
     const normalizedFake = fakeRes.map(p => ({
       uniqueId: `fake-${p.id}`,
       title: p.title || "Unknown Product",
       price: p.price || 0,
       image: p.image || "/placeholder.jpg",
+      category: (() => {
+        const c = p.category.toLowerCase();
+        if (c.includes("men") || c.includes("women") || c.includes("fashion")) return "fashion";
+        if (c.includes("jewelery")) return "beauty"; // adjust as needed
+        return c;
+      })(),
     }));
 
+    // Normalize DummyJSON
     const normalizedDummy = dummyRes.products.map(p => ({
       uniqueId: `dummy-${p.id}`,
       title: p.title || "Unknown Product",
       price: p.price || 0,
       image: p.images?.[0] || "/placeholder.jpg",
+      category: (() => {
+        const c = p.category.toLowerCase();
+        if (c.includes("fashion")) return "fashion";
+        if (c.includes("smartphones") || c.includes("electronics")) return "electronics";
+        return c;
+      })(),
     }));
 
+    // Normalize Kolzsticks
     const normalizedKolz = kolzRes.map((p, idx) => ({
       uniqueId: `kolz-${idx}`,
       title: p.name || "Unknown Product",
       price: p.price || 0,
       image: p.image || "/placeholder.jpg",
+      category: p.category?.toLowerCase() || "other",
     }));
 
     res.json([...normalizedFake, ...normalizedDummy, ...normalizedKolz]);
@@ -75,6 +88,7 @@ app.get("/api/products", async (req, res) => {
     res.status(500).json({ message: "Error fetching products" });
   }
 });
+
 
 // ------------------------
 // Serve React Frontend
