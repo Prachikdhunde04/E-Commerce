@@ -1,10 +1,10 @@
-/* Navbar Background */
+/* Navbar Background
 .navbar-custom {
   background-color: #fefae0 !important;
 }
 
 /* Icons and Text */
-.nav-item-custom {
+/* .nav-item-custom {
   color: #582f0e !important;
   margin: 0 15px;
   text-decoration: none;
@@ -19,28 +19,28 @@
 }
 
 /* Category Links */
-.navbar-custom .nav-link.nav-item-custom {
-  margin: 0 10px;
-}
+/* .navbar-custom .nav-link.nav-item-custom {
+  margin: 0 10px; */
+
 
 /* Search Input + Button */
-.search-input,
+/* .search-input,
 .search-btn {
   height: 40px;  
   border: 2px solid #582f0e;           
   border-radius: 0.8rem;         
-}
+} */
 
 /* Input specific */
-.search-input {
+/* .search-input {
   flex-grow: 1;
   max-width: 400px;
   color: #582f0e;
   background-color: transparent;
-}
+} */ 
 
 /* Button specific */
-.search-btn {
+/* .search-btn {
   background-color: #582f0e;
   color: #fefae0;
   border: none;
@@ -48,7 +48,7 @@
 }
 
 /* Cart Badge */
-.cart-badge {
+/* .cart-badge {
   position: absolute;
   top: -5px;
   right: -10px;
@@ -64,10 +64,10 @@
   left: 0;
   width: 100%;
   z-index: 1050; /* keeps it above other elements */
-  background-color: #fff; /* or your navbar background */
-  border-bottom: 1px solid #ddd; /* optional subtle shadow */
-}
+  /* background-color: #fff; /* or your navbar background */
+  /* border-bottom: 1px solid #ddd; /* optional subtle shadow */
 
-body {
+
+/* body {
   padding-top: 70px; /* adjust this equal to navbar height */
-}
+
