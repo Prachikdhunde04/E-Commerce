@@ -36,6 +36,7 @@ function App() {
                   <>
                     <div className="hero-video-wrapper">
                       <video
+                        className="hero-video"
                         src="/videos/Untitled_design_2.mp4"
                         autoPlay
                         muted
