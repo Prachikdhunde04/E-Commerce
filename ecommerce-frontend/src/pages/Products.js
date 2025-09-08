@@ -1,46 +1,36 @@
-// src/pages/Products.js
 import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import ProductGrid from "../components/ProductGrid";
 import { CartContext } from "../context/CartContext";
+import ProductGrid from "../components/ProductGrid";
 
 export default function Products({ searchTerm, filters }) {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
 
-  // Fetch products from all APIs
   useEffect(() => {
     async function fetchProducts() {
       try {
         const [fakeRes, dummyRes, kolzRes] = await Promise.all([
-          fetch("https://fakestoreapi.com/products"),
-          fetch("https://dummyjson.com/products"),
-          fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json"),
+          fetch("https://fakestoreapi.com/products").then(r => r.json()),
+          fetch("https://dummyjson.com/products").then(r => r.json()),
+          fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json").then(r => r.json()),
         ]);
 
-        const fakeData = await fakeRes.json();
-        const dummyData = await dummyRes.json();
-        const kolzData = await kolzRes.json();
-
-        // Normalize FakeStore
-        const normalizedFake = fakeData.map((p) => ({
+        const normalizedFake = fakeRes.map(p => ({
           uniqueId: `fake-${p.id}`,
           title: p.title || "Unknown Product",
           price: p.price || 0,
           image: p.image || null,
         }));
 
-        // Normalize DummyJSON
-        const normalizedDummy = dummyData.products.map((p) => ({
+        const normalizedDummy = dummyRes.products.map(p => ({
           uniqueId: `dummy-${p.id}`,
           title: p.title || "Unknown Product",
           price: p.price || 0,
           image: p.images?.[0] || null,
         }));
 
-        // Normalize Kolzsticks
-        const normalizedKolz = kolzData.map((p, idx) => ({
+        const normalizedKolz = kolzRes.map((p, idx) => ({
           uniqueId: `kolz-${idx}`,
           title: p.name || "Unknown Product",
           price: p.price || 0,
@@ -58,34 +48,31 @@ export default function Products({ searchTerm, filters }) {
     fetchProducts();
   }, []);
 
-  // Apply search + price filters
   useEffect(() => {
     let result = [...products];
 
     if (searchTerm) {
-      result = result.filter((p) =>
-        p.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      result = result.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
     }
 
     if (filters.price) {
       const [min, max] = filters.price.split("-").map(Number);
-      result = result.filter((p) => p.price >= min && p.price <= max);
+      result = result.filter(p => p.price >= min && p.price <= max);
     }
 
     setFilteredProducts(result);
-  }, [products, searchTerm, filters]);
+  }, [searchTerm, filters, products]);
 
   return (
     <div className="container mt-4">
       <h2 className="mb-3">Products</h2>
-
-      {filteredProducts.length === 0 && <p>No products found.</p>}
-
       <ProductGrid products={filteredProducts} addToCart={addToCart} />
+      {filteredProducts.length === 0 && <p>No products found.</p>}
     </div>
   );
 }
+
+
 
 
 

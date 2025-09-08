@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function ProductGrid({ products }) {
+export default function ProductGrid({ products, addToCart }) {
   if (!products || products.length === 0) return <p>No products found.</p>;
 
   return (
@@ -23,8 +23,17 @@ export default function ProductGrid({ products }) {
               </div>
               <div className="card-footer text-center">
                 <Link to={`/product/${productId}`} state={{ product }}>
-                  <div>{product.title}</div>
+                  View Details
                 </Link>
+                {addToCart && (
+                  <button
+                    className="btn btn-dark btn-sm mt-2"
+                    disabled={product.price <= 0}
+                    onClick={() => addToCart({ ...product, quantity: 1 })}
+                  >
+                    Add to Cart
+                  </button>
+                )}
               </div>
             </div>
           </div>
