@@ -5,13 +5,13 @@ A single-page e-commerce web application built as part of an internship assignme
 ---
 
 ## 🚀 Live Demo  
-🔗 [Click here to view the deployed site](https://your-deployed-site-link.com)  
+🔗 [Click here to view the deployed site]( https://e-commerce-ibfl.onrender.com)  
 
 ---
 
 ## 📂 GitHub Repository  
-🔗 [Frontend Repository](https://github.com/your-username/ecommerce-frontend)  
-🔗 [Backend Repository](https://github.com/your-username/ecommerce-backend)  
+🔗 [Frontend Repository](https://github.com/Prachikdhunde04/ecommerce-frontend)  
+🔗 [Backend Repository](https://github.com/Prachikdhunde04/ecommerce-backend)  
 
 ---
 
@@ -62,9 +62,8 @@ A single-page e-commerce web application built as part of an internship assignme
 
 ---
 
-## ⚙️ Installation & Setup  
+## 👤 Author  
+**Prachi Dhunde**  
+📧 prachidhunde123@gmail.com  
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/prachidhunde)  
 
-### Clone the repositories  
-```bash
-git clone https://github.com/Prachikdhunde04/ecommerce-frontend.git
-git clone https://github.com/Prachikdhunde04/ecommerce-backend.git
