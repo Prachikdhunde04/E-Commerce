@@ -90,12 +90,7 @@ app.get("/api/products", async (req, res) => {
 });
 
 
-// ------------------------
-// Serve React Frontend
-// ------------------------
 const buildPath = path.join(__dirname, "ecommerce-frontend", "build");
-
-// Serve static files from the frontend build
 app.use(express.static(buildPath));
 
 // Catch-all route for React Router (everything not starting with /api goes to index.html)

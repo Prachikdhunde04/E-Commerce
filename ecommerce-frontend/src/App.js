@@ -35,6 +35,7 @@ function App() {
                 element={
                   <>
                     <div className="hero-video-wrapper">
+                      <div className="hero-video-wrapper">
                       <video
                         className="hero-video"
                         src="/videos/Untitled_design_2.mp4"
@@ -43,6 +44,8 @@ function App() {
                         loop
                         playsInline
                       />
+                    </div>
+
                     </div>
                     <HomePage searchTerm={searchTerm} filters={filters} />
                   </>
@@ -73,4 +76,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;   
