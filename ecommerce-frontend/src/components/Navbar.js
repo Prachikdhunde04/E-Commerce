@@ -1,3 +1,4 @@
+// src/components/Navbar.js
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
@@ -108,6 +109,7 @@ export default function Navbar({ onSearch, onFilterChange }) {
               <option value="100-500">$100 - $500</option>
               <option value="500-1000">$500 - $1000</option>
             </select>
+
             <select
               className="form-select form-select-sm mb-1"
               value={filters.color}
@@ -140,8 +142,8 @@ export default function Navbar({ onSearch, onFilterChange }) {
                   position: "absolute",
                   top: "0px",
                   right: "0px",
-                  backgroundColor:"#fefae0",
-                  color: "#fff",
+                  backgroundColor: "#fefae0",
+                  color: "#000",
                   borderRadius: "50%",
                   padding: "2px 6px",
                   fontSize: "12px",
@@ -177,5 +179,3 @@ export default function Navbar({ onSearch, onFilterChange }) {
     </nav>
   );
 }
-
-

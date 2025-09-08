@@ -19,6 +19,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { CartProvider } from "./context/CartContext";
 
 function App() {
+  // Global state for search term and filters
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({ price: "" });
 
@@ -39,12 +40,11 @@ function App() {
                   <>
                     <div className="hero-video-wrapper">
                       <video
-                        src={`${process.env.PUBLIC_URL}/videos/Untitled design (2).mp4`}
+                        src="videos/Untitled_design_2.mp4" 
                         autoPlay
                         muted
                         loop
                         playsInline
-                        style={{ width: "100%", height: "auto", maxHeight: "500px", objectFit: "cover" }}
                       />
                     </div>
                     <HomePage searchTerm={searchTerm} filters={filters} />

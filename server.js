@@ -1,35 +1,25 @@
-// server.js
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
-const fetch = require("node-fetch"); // for fetching external APIs
+const fetch = require("node-fetch");
 
 const app = express();
 
-// ------------------------
 // Middleware
-// ------------------------
 app.use(express.json());
 app.use(cors());
 
-// ------------------------
-// MongoDB Connection
-// ------------------------
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.error("❌ MongoDB Connection Error:", err));
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
-// ------------------------
-// Test Route
-// ------------------------
+// Test route
 app.get("/api/test", (req, res) => res.send("API is running..."));
 
-// ------------------------
-// API Routes
-// ------------------------
+// Load routes
 const authRoutes = require("./routes/auth");
 const itemsRoutes = require("./routes/items");
 const cartRoutes = require("./routes/carts");
@@ -38,68 +28,53 @@ app.use("/api/auth", authRoutes);
 app.use("/api/items", itemsRoutes);
 app.use("/api/cart", cartRoutes);
 
-// ------------------------
-// /api/products Route
-// ------------------------
+// /api/products route
 app.get("/api/products", async (req, res) => {
-  try {
-    // Fetch all 3 APIs in parallel
-    const [fakeStoreRes, dummyRes, kolzRes] = await Promise.all([
-      fetch("https://fakestoreapi.com/products").then(r => r.json()),
-      fetch("https://dummyjson.com/products").then(r => r.json()),
-      fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json").then(r => r.json()),
-    ]);
+    try {
+        const [fakeRes, dummyRes, kolzRes] = await Promise.all([
+        fetch("https://fakestoreapi.com/products").then(r => r.json()),
+        fetch("https://dummyjson.com/products").then(r => r.json()),
+        fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json").then(r => r.json()),
+        ]);
 
-    // Normalize DummyJSON
-    const dummyProducts = dummyRes.products.map(p => ({
-      ...p,
-      uniqueId: `dummy-${p.id}`,
-      title: p.title,
-      price: p.price || 0,
-      image: p.images?.[0] || "/placeholder.jpg",
-    }));
+        const normalizedFake = fakeRes.map(p => ({
+        uniqueId: `fake-${p.id}`,
+        title: p.title || "Unknown Product",
+        price: p.price || 0,
+        image: p.image || "/placeholder.jpg",
+        }));
 
-    // Normalize Kolzsticks
-    const kolzProducts = kolzRes.map((p, idx) => ({
-      ...p,
-      uniqueId: `kolz-${idx}`,
-      title: p.name || "Unknown Product",
-      price: p.price || 0,
-      image: p.image || "/placeholder.jpg",
-    }));
+        const normalizedDummy = dummyRes.products.map(p => ({
+        uniqueId: `dummy-${p.id}`,
+        title: p.title || "Unknown Product",
+        price: p.price || 0,
+        image: p.images?.[0] || "/placeholder.jpg",
+        }));
 
-    // Normalize FakeStore
-    const fakeProducts = fakeStoreRes.map(p => ({
-      ...p,
-      uniqueId: `fake-${p.id}`,
-      title: p.title,
-      price: p.price || 0,
-      image: p.image || "/placeholder.jpg",
-    }));
+        const normalizedKolz = kolzRes.map((p, idx) => ({
+        uniqueId: `kolz-${idx}`,
+        title: p.name || "Unknown Product",
+        price: p.price || 0,
+        image: p.image || "/placeholder.jpg",
+        }));
 
-    // Merge all products
-    const mergedProducts = [...fakeProducts, ...dummyProducts, ...kolzProducts];
+        const mergedProducts = [...normalizedFake, ...normalizedDummy, ...normalizedKolz];
+        res.json(mergedProducts);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching products" });
+    }
+    });
 
-    res.json(mergedProducts);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching products" });
-  }
-});
+    // Serve React frontend
+    app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
-// ------------------------
-// Serve React Frontend
-// ------------------------
-app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
+    app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
+    });
 
-// Catch-all route for React (SPA routing)
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
-});
+    // Start server
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
-// ------------------------
-// Start Server
-// ------------------------
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 

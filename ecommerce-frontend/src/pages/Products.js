@@ -1,12 +1,15 @@
+// src/pages/Products.js
 import React, { useEffect, useState, useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import { Link } from "react-router-dom";
 import ProductGrid from "../components/ProductGrid";
+import { CartContext } from "../context/CartContext";
 
 export default function Products({ searchTerm, filters }) {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
 
+  // Fetch products from all APIs
   useEffect(() => {
     async function fetchProducts() {
       try {
@@ -19,6 +22,14 @@ export default function Products({ searchTerm, filters }) {
         const fakeData = await fakeRes.json();
         const dummyData = await dummyRes.json();
         const kolzData = await kolzRes.json();
+
+        // Normalize FakeStore
+        const normalizedFake = fakeData.map((p) => ({
+          uniqueId: `fake-${p.id}`,
+          title: p.title || "Unknown Product",
+          price: p.price || 0,
+          image: p.image || null,
+        }));
 
         // Normalize DummyJSON
         const normalizedDummy = dummyData.products.map((p) => ({
@@ -36,15 +47,6 @@ export default function Products({ searchTerm, filters }) {
           image: p.image || null,
         }));
 
-        // Normalize FakeStore
-        const normalizedFake = fakeData.map((p) => ({
-          uniqueId: `fake-${p.id}`,
-          title: p.title || "Unknown Product",
-          price: p.price || 0,
-          image: p.image || null,
-        }));
-
-        // Merge all
         const merged = [...normalizedFake, ...normalizedDummy, ...normalizedKolz];
         setProducts(merged);
         setFilteredProducts(merged);
@@ -77,10 +79,14 @@ export default function Products({ searchTerm, filters }) {
   return (
     <div className="container mt-4">
       <h2 className="mb-3">Products</h2>
-      <ProductGrid products={filteredProducts} />
+
+      {filteredProducts.length === 0 && <p>No products found.</p>}
+
+      <ProductGrid products={filteredProducts} addToCart={addToCart} />
     </div>
   );
 }
+
 
 
 
