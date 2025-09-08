@@ -93,11 +93,14 @@ app.get("/api/products", async (req, res) => {
 // ------------------------
 // Serve React Frontend
 // ------------------------
-app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
+const buildPath = path.join(__dirname, "ecommerce-frontend", "build");
 
-// Catch-all route for SPA (Express v5 alpha compatible)
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
+// Serve static files from the frontend build
+app.use(express.static(buildPath));
+
+// Catch-all route for React Router (everything not starting with /api goes to index.html)
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 // ------------------------
