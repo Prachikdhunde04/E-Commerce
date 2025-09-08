@@ -38,7 +38,7 @@ app.use("/api/items", itemsRoutes);
 app.use("/api/cart", cartRoutes);
 
 // ------------------------
-// Fetch merged products from 3 APIs
+// /api/products route - merge multiple APIs
 // ------------------------
 app.get("/api/products", async (req, res) => {
   try {
@@ -48,7 +48,6 @@ app.get("/api/products", async (req, res) => {
       fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json").then(r => r.json()),
     ]);
 
-    // Normalize FakeStore
     const normalizedFake = fakeRes.map(p => ({
       uniqueId: `fake-${p.id}`,
       title: p.title || "Unknown Product",
@@ -56,7 +55,6 @@ app.get("/api/products", async (req, res) => {
       image: p.image || "/placeholder.jpg",
     }));
 
-    // Normalize DummyJSON
     const normalizedDummy = dummyRes.products.map(p => ({
       uniqueId: `dummy-${p.id}`,
       title: p.title || "Unknown Product",
@@ -64,7 +62,6 @@ app.get("/api/products", async (req, res) => {
       image: p.images?.[0] || "/placeholder.jpg",
     }));
 
-    // Normalize Kolzsticks
     const normalizedKolz = kolzRes.map((p, idx) => ({
       uniqueId: `kolz-${idx}`,
       title: p.name || "Unknown Product",
@@ -72,8 +69,7 @@ app.get("/api/products", async (req, res) => {
       image: p.image || "/placeholder.jpg",
     }));
 
-    const mergedProducts = [...normalizedFake, ...normalizedDummy, ...normalizedKolz];
-    res.json(mergedProducts);
+    res.json([...normalizedFake, ...normalizedDummy, ...normalizedKolz]);
   } catch (err) {
     console.error("Error fetching products:", err);
     res.status(500).json({ message: "Error fetching products" });
@@ -85,7 +81,7 @@ app.get("/api/products", async (req, res) => {
 // ------------------------
 app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
-// Catch-all route for SPA (fixed for Express v5)
+// Catch-all route for SPA routing (Express v5 compatible)
 app.get("/:any(*)", (req, res) => {
   res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
 });
