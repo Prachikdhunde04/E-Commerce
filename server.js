@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.get("/api/test", (req, res) => res.send("API is running..."));
 
 // ------------------------
-// Load API Routes
+// API Routes
 // ------------------------
 const authRoutes = require("./routes/auth");
 const itemsRoutes = require("./routes/items");
@@ -38,7 +38,7 @@ app.use("/api/items", itemsRoutes);
 app.use("/api/cart", cartRoutes);
 
 // ------------------------
-// /api/products route - merge all APIs
+// Fetch merged products from 3 APIs
 // ------------------------
 app.get("/api/products", async (req, res) => {
   try {
@@ -85,8 +85,8 @@ app.get("/api/products", async (req, res) => {
 // ------------------------
 app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
-// Catch-all route for SPA routing
-app.get("*", (req, res) => {
+// Catch-all route for SPA (fixed for Express v5)
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
 });
 
