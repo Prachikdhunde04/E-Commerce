@@ -78,9 +78,10 @@ app.get("/api/products", async (req, res) => {
 
 // ------------------------
 // Serve React Frontend
+// ------------------------
 app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
-// Catch-all for SPA routes
+// Catch-all route for SPA routing (Express v5 compatible)
 app.get("/:pathMatch(.*)*", (req, res) => {
   res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
 });
@@ -90,6 +91,7 @@ app.get("/:pathMatch(.*)*", (req, res) => {
 // ------------------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
 
 
 
