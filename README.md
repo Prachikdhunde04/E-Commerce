@@ -5,7 +5,7 @@ A single-page e-commerce web application built as part of an internship assignme
 ---
 
 ## 🚀 Live Demo  
-🔗 [Click here to view the deployed site]( https://e-commerce-ibfl.onrender.com)  
+🔗 [Click here to view the deployed site](https://e-commerce-1-7w1u.onrender.com)
 
 ---
 
