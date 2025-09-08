@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -18,28 +19,27 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.log("❌ MongoDB Error:", err));
 
 // Test route
-app.get("/", (req, res) => res.send("API is running..."));
+app.get("/api/test", (req, res) => res.send("API is running..."));
 
 // Load routes
 const authRoutes = require("./routes/auth");
 const itemsRoutes = require("./routes/items");
-const cartRoutes = require("./routes/carts"); // Make sure filename matches
+const cartRoutes = require("./routes/carts");
 
-app.use("/api/auth", authRoutes);   // Signup/Login routes
-app.use("/api/items", itemsRoutes); // Items routes (protected)
-app.use("/api/cart", cartRoutes);   // Cart routes (protected)
+app.use("/api/auth", authRoutes);
+app.use("/api/items", itemsRoutes);
+app.use("/api/cart", cartRoutes);
+
+// Serve React frontend
+app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
+
+// Catch-all route for React
+app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
+});
 
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
-
-const path = require("path");
-
-// Serve frontend
-app.use(express.static(path.join(__dirname, "client/build")));
-
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'ecommerce-frontend/build', 'index.html'));
-});
 
