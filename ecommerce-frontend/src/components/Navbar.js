@@ -14,7 +14,10 @@ export default function Navbar({ onSearch, onFilterChange }) {
   });
 
   const navigate = useNavigate();
-  const { totalItems } = useContext(CartContext);
+  const { cartItems } = useContext(CartContext);
+
+  // Calculate total items in cart
+  const totalItems = cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -95,15 +98,15 @@ export default function Navbar({ onSearch, onFilterChange }) {
           {/* Mini Filters */}
           <div className="d-flex flex-column small-filters">
             <select
-            className="form-select form-select-sm mb-1"
-            value={filters.price}
-            onChange={(e) => handleFilterChange("price", e.target.value)}
-          >
-            <option value="">Price</option>
-            <option value="0-50">$0 - $50</option>
-            <option value="50-100">$50 - $100</option>
-            <option value="100-500">$100 - $500</option>
-            <option value="500-1000">$500 - $1000</option>
+              className="form-select form-select-sm mb-1"
+              value={filters.price}
+              onChange={(e) => handleFilterChange("price", e.target.value)}
+            >
+              <option value="">Price</option>
+              <option value="0-50">$0 - $50</option>
+              <option value="50-100">$50 - $100</option>
+              <option value="100-500">$100 - $500</option>
+              <option value="500-1000">$500 - $1000</option>
             </select>
             <select
               className="form-select form-select-sm mb-1"
@@ -119,9 +122,8 @@ export default function Navbar({ onSearch, onFilterChange }) {
               <option value="Beige">Beige</option>
               <option value="Pink">Pink</option>
               <option value="Brown">Brown</option>
-              <option value="grey">grey</option>
+              <option value="grey">Grey</option>
             </select>
-
           </div>
 
           {/* Cart */}
@@ -131,7 +133,24 @@ export default function Navbar({ onSearch, onFilterChange }) {
           >
             <i className="bi bi-cart-fill"></i>
             <span>Cart</span>
-            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+            {totalItems > 0 && (
+              <span
+                className="cart-badge"
+                style={{
+                  position: "absolute",
+                  top: "0px",
+                  right: "0px",
+                  backgroundColor:"#fefae0",
+                  color: "#fff",
+                  borderRadius: "50%",
+                  padding: "2px 6px",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+              >
+                {totalItems}
+              </span>
+            )}
           </Link>
 
           {/* Login */}

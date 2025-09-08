@@ -9,25 +9,26 @@ export function CartProvider({ children }) {
   // Add item to cart
   const addToCart = (product) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const id = product.id || product.uniqueId;
+      const existing = prev.find((item) => (item.id || item.uniqueId) === id);
+
       if (existing) {
         // Update quantity
-        const updated = prev.map((item) =>
-          item.id === product.id
+        return prev.map((item) =>
+          (item.id || item.uniqueId) === id
             ? { ...item, quantity: Math.max(item.quantity + (product.quantity || 1), 1) }
             : item
         );
-        return updated;
       } else {
-        // Add new item with quantity
-        return [...prev, { ...product, quantity: product.quantity || 1 }];
+        // Add new item
+        return [...prev, { ...product, quantity: product.quantity || 1, id }];
       }
     });
   };
 
   // Remove item completely from cart
   const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    setCartItems((prev) => prev.filter((item) => (item.id || item.uniqueId) !== id));
   };
 
   // Clear cart
@@ -46,6 +47,7 @@ export function CartProvider({ children }) {
     </CartContext.Provider>
   );
 }
+
 
 
 
