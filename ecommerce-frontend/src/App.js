@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 
 // Pages
 import HomePage from "./pages/Products";
-import CategoryPage from "./pages/CategoryPage";
+import CategoryPage from "./pages/categoryPage";
 import ProductDetail from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
