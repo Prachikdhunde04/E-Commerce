@@ -86,7 +86,7 @@ app.get("/api/products", async (req, res) => {
 app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
 // Catch-all route for SPA (fixed for Express v5)
-app.get('/*', (req, res) => {
+app.get("/:any(*)", (req, res) => {
   res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
 });
 
