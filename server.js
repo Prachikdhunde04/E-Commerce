@@ -78,14 +78,12 @@ app.get("/api/products", async (req, res) => {
 
 // ------------------------
 // Serve React Frontend
-// ------------------------
 app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
-// Catch-all route for SPA routing (Express v5 compatible)
-app.get("*", (req, res) => {
+// Catch-all for SPA routes
+app.get("/:pathMatch(.*)*", (req, res) => {
   res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
 });
-
 
 // ------------------------
 // Start Server
