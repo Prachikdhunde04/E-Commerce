@@ -81,8 +81,8 @@ app.get("/api/products", async (req, res) => {
 // ------------------------
 app.use(express.static(path.join(__dirname, "ecommerce-frontend/build")));
 
-// Catch-all route for SPA routing (Express v5 compatible)
-app.get("/:pathMatch(.*)*", (req, res) => {
+// Catch-all route for SPA (Express v5 alpha compatible)
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "ecommerce-frontend/build", "index.html"));
 });
 
